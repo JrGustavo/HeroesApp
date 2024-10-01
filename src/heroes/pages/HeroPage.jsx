@@ -1,32 +1,31 @@
-import {Navigate, useParams} from "react-router-dom";
+import {Navigate, useNavigate, useParams} from "react-router-dom";
 import {getHeroById} from "../helpers/index";
+import {useMemo} from "react";
 
 export const HeroPage = () => {
 
 const {id} = useParams();
+const navigate = useNavigate();
+const hero =  useMemo(() => getHeroById(id), [id])
 
-const hero = getHeroById(id);
+const onNavigateBack = () => {
+        navigate(-1)
+    }
 
 if ( !hero){
-
     return  <Navigate to ="/marvel"/>
-
-
 }
 
-console.log(hero);
-
-
     return (
-        <div className="row mt-5">
+        <div className="row mt-5 ">
             <div className="col-4">
                 <img
-                    src={`/assets/heroes/${id}.jpg`}
+                    src={ `/assets/heroes/${ id }.jpg` }
                     alt={hero.superhero}
-                    className="img-thumbnail"
+                    className="img-thumbnail "
                 />
             </div>
-                <div className="col">
+                <div className="col-8">
                     <h3>{hero.superhero}</h3>
                     <ul className='list-group list-group-flush'>
                         <li className="list-group-item"><b>Alter ego: </b>{hero.alter_ego}</li>
@@ -36,12 +35,11 @@ console.log(hero);
 
                     <h5 className="mt-5"> Characters</h5>
                     <p>{hero.characters}</p>
-
-                    <button className="btn btn-primary">
+                    <button className="btn btn-primary"
+                            onClick={ onNavigateBack }
+                        >
                         Regresar
                     </button>
-
-
                 </div>
         </div>
     )
